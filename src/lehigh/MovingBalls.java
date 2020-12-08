@@ -2,59 +2,61 @@ package lehigh;
 
 import processing.core.PApplet;
 
-public class MovingBalls extends PApplet {
+import java.util.Random;
 
-    public void settings() {
+public class MovingBalls extends PApplet{
+
+
+    int numberOfBall = 6;
+    int [] x = new int[numberOfBall];
+    int [] y = new int[numberOfBall];
+    int [] speedX = new int[numberOfBall];
+    int [] speedY = new int[numberOfBall];
+
+
+    public void settings(){
         size(500, 500);
+        Random random = new Random();
+        for(int i = 0; i < numberOfBall; i++){
+            x[i]=random.nextInt(500);
+            y[i]=random.nextInt(500);
+            speedX[i]=random.nextInt(5)+1;
+            speedY[i]=random.nextInt(5)+1;
+        }
     }
 
-    int x = 0;
-    int y = 0;
-    int speedx = 5;
-    int speedy = 2;
-    int x1 = 212;
-    int y1 = 323;
-    int speedx1 = 4;
-    int speedy1 = 1;
-    int x2 = 10;
-    int y2 = 200;
-    int speedx2 = 2;
-    int speedy2 = 3;
+    public void draw(){
+        background(255);
+        for (int i = 0; i < x.length;i++){
+            fill(0);
+            ellipse(x[i], y[i],50,50);
 
+            x[i] += speedX[i];
+            y[i] += speedY[i];
 
-    public void draw() {
-        background(0);
-        ellipse(x, y, 20, 20);
-        x += speedx;
-        y += speedy;
-        ellipse(x1, y1, 20, 20);
-        x1 += speedx1;
-        y1 += speedy1;
-        ellipse(x2, y2, 20, 20);
-        x2 += speedx2;
-        y2 += speedy2;
+            if(x[i]>500 || x[i]<0){
+                speedX[i] = -speedX[i];
+            }
 
-        if (x > 500 || x < 0) {
-            speedx *= -1;
-        }
-        if (y > 500 || y < 0) {
-            speedy *= -1;
+            if(y[i]>500 || y[i]<0) {
+                speedY[i] = -speedY[i];
+            }
+
+            for(int k = 0; k < numberOfBall; k++){
+                int Xd = x[k] - x[i];
+                int Yd = y[k] - y[i];
+                if(Math.abs(Xd) <= 100 && Math.abs(Yd) <= 100){
+                    line(x[k],y[k],x[i],y[i]);
+                }
+            }
+
         }
 
-        if (x1 > 500 || x1 < 0) {
-            speedx1 *= -1;
-        }
-        if (y1 > 500 || y1 < 0) {
-            speedy1 *= -1;
-        }
+    }
 
-        if (x2 > 500 || x2 < 0) {
-            speedx2 *= -1;
-        }
-        if (y2 > 500 || y2 < 0) {
-            speedy2 *= -1;
-        }
-
-
+    public static void main(String[] args) {
+        String[] processingArgs = {"MovingBalls"};
+        MovingBalls movingBalls = new MovingBalls();
+        PApplet.runSketch(processingArgs, movingBalls);
     }
 }
